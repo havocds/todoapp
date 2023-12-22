@@ -28,14 +28,3 @@ repos:
       additional_dependencies:
         - "pydantic>=1.10.4"
         - "types-setuptools>=69.0.0.0"
-
-
-# Pytest
-- repo: local
-  hooks:
-    - id: tests
-      name: run tests
-      entry: pytest -v
-      language: system
-      types: [python]
-      stages: [push]
