@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoapp
+  labels:
+    app: todoapp
+    release: primary
+spec:
+  selector:
+    matchLabels:
+      app: todoapp
+      release: primary
+  template:
+    metadata:
+      labels:
+        app: todoapp
+        release: primary
+    spec:
+      containers:
+        - name: todoapp
+          image: havocds/todoapp:v0.0.1
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Always
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+          resources:
+            limits:
+              memory: 250Mi
+              cpu: 100m
+            requests:
+              memory: 50Mi
+              cpu: 50m
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: todoapp
+  labels:
+    app: todoapp
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: todoapp
+
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: todoapp
+  labels:
+    app: todoapp
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: todoapp
+  minReplicas: 2
+  maxReplicas: 2
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80

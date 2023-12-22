@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    app: db
+    release: primary
+spec:
+  selector:
+    matchLabels:
+      app: db
+      release: primary
+  template:
+    metadata:
+      labels:
+        app: db
+        release: primary
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:latest
+          ports:
+            - containerPort: 27017
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 250Mi
+              cpu: 100m
+            requests:
+              memory: 50Mi
+              cpu: 50m
+          volumeMounts:
+            - name: storage
+              mountPath: /data/db
+              readOnly: false
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: mongo-pvc
+            readOnly: false
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: db
+    release: primary
+spec:
+  type: ClusterIP
+  ports:
+    - name: mongo
+      port: 27017
+      targetPort: 27017
+  selector:
+    app: db
+    release: primary
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-pv
+spec:
+  capacity:
+    storage: 256Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: /tmp/db
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+  labels:
+    app: db
+    release: primary
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi

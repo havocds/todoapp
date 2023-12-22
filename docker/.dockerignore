@@ -1,0 +1,10 @@
+__pycache__
+Dockerfile
+tests/
+*/env*
+*/venv*
+*.env
+*.log
+.git
+.gitignore
+.tox
