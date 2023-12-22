@@ -3,9 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 from starlette.responses import FileResponse
 
-from .api import api_router
-from .config.core import INDEX_HTML, settings
-from .logging_settings import setup_app_logging
+from todoapp.api import api_router
+from todoapp.config.core import INDEX_HTML, settings
+from todoapp.logging_settings import setup_app_logging
 
 setup_app_logging()
 

@@ -1,25 +1,24 @@
-import pkg_resources
+import importlib.metadata
+
 from fastapi import APIRouter, HTTPException, status
 from loguru import logger
 
-from .config.core import settings
-from .database import (
+from todoapp.config.core import settings
+from todoapp.database import (
     create_task,
     fetch_all_tasks,
     fetch_one_task,
     remove_task,
     update_task,
 )
-from .schemas import Healthz, Task
+from todoapp.schemas import Healthz, Task
 
 api_router = APIRouter()
 
 
 @api_router.get("/healthz", response_model=Healthz, status_code=status.HTTP_200_OK)
 async def get_health() -> dict:
-    health = Healthz(
-        name=settings.APP_NAME, api_version=pkg_resources.get_distribution("todoapp").version
-    )
+    health = Healthz(name=settings.APP_NAME, api_version=importlib.metadata.version("todoapp"))
     return health.model_dump()
 
 

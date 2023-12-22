@@ -1,9 +1,9 @@
 from typing import Any
 
 import motor.motor_asyncio
-from schemas import Task
 
-from .config.core import settings
+from todoapp.config.core import settings
+from todoapp.schemas import Task
 
 client: Any = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URI)
 
