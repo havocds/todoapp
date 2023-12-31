@@ -1,5 +1,4 @@
-# Boilerplate Todo-App for FastAPI, MongoDB, Motor Projects: 
-Powerful FastAPI backend boilerplate for real production, following best practices for packaging, project structure and deployment.
+# Boilerplate Todo-App for FastAPI, MongoDB, Motor Projects
 
 ## Pre-Requisites
 * Python 3.11+
@@ -8,9 +7,7 @@ Powerful FastAPI backend boilerplate for real production, following best practic
 
 ## Getting started
 
-Rename the `.env.sample` file to `.env` within the project folder or export the `MONGODB_URI` environment variable manually with `$ export MONGODB_URI=<YOUR_URI>`.
-
-The simplest way to start the production-ready application is via docker-compose.
+Rename the `.env.sample` file to `.env` within the project folder or export the `MONGODB_URI` environment variable manually with `$ export MONGODB_URI=<YOUR_URI>`. The simplest way to start the production-ready application is via docker-compose.
 
 ```bash
 docker-compose up
