@@ -8,3 +8,4 @@ tests/
 .git
 .gitignore
 .tox
+README.md

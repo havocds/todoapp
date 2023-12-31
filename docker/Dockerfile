@@ -1,15 +1,32 @@
-FROM python:3.11.5-slim
+FROM python:3.11.6-slim as base
 
-RUN groupadd -r nonadmins && useradd -r -g nonadmins notanadmin
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONHASHSEED=random \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=100 \
+    POETRY_VERSION=1.7.1 \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
 
-WORKDIR /opt/backend
+WORKDIR /tmp
 
-COPY ./src/requirements.txt /opt/backend/requirements.txt
+RUN pip install poetry==${POETRY_VERSION}
 
-RUN pip install --no-cache-dir --upgrade -r /opt/backend/requirements.txt
+COPY ./pyproject.toml ./poetry.lock* /tmp/
 
-COPY ./src /opt/backend
+RUN poetry export --without-hashes --without dev -f requirements.txt --output requirements.txt && \
+    rm -rf ${POETRY_CACHE_DIR}
 
-USER notanadmin
+FROM python:3.11.6-slim
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+WORKDIR /todoapp
+
+COPY --from=base /tmp/requirements.txt /todoapp/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /todoapp/requirements.txt
+
+COPY ./src /todoapp
+
+CMD ["uvicorn", "todoapp.main:app", "--host", "0.0.0.0", "--port", "8000"]
