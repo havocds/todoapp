@@ -1,5 +1,3 @@
-import importlib.metadata
-
 from fastapi import APIRouter, HTTPException, status
 from loguru import logger
 
@@ -18,7 +16,7 @@ api_router = APIRouter()
 
 @api_router.get("/healthz", response_model=Healthz, status_code=status.HTTP_200_OK)
 async def get_health() -> dict:
-    health = Healthz(name=settings.APP_NAME, api_version=importlib.metadata.version("todoapp"))
+    health = Healthz(name=settings.APP_NAME)
     return health.model_dump()
 
 

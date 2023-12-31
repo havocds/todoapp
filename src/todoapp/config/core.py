@@ -15,7 +15,7 @@ INDEX_HTML = TEMPLATES_PATH / "index.html"
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "Todoapp"
+    APP_NAME: str = "todoapp"
     MONGODB_URI: str
     API_V1_STR: str = "/api/v1"
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = [
