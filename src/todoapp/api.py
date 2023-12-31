@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 from loguru import logger
 
-from todoapp.config.core import settings
+from todoapp.config import settings
 from todoapp.database import (
     create_task,
     fetch_all_tasks,
